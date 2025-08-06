@@ -1,16 +1,16 @@
-# Cross-feeding of two gastrointestinal bacteria
+# 两种胃肠道细菌的交叉喂养
 
-> <mark>Please note</mark>: This tutorial assumes a gapseq  <= v1.3.1. An updated version of the tutorial for gapseq >= v1.4.0 is under construction.
+> <mark>:heavy_exclamation_mark: 请注意</mark>：本教程适用于gapseq版本≤v1.3.1。针对gapseq版本≥v1.4.0的更新版教程正在制作中。
 
-##### Background
+##### 背景
 
-The intestinal bacterium *Eubacterium rectale* is known to be able to use acetate as energy source under anaerobic conditions and thereby forms butyrate as end product ([Rivère *et al.* (2015) Appl Envrion Microbiol](https://pubmed.ncbi.nlm.nih.gov/26319874/)). Acetate is a common fermentation end product in a number of different other intestinal bacteria, including Bifidobacteria (e.g. *Bifidobacterium longum*). In this tutorial, genome-scale models for *E. rectale* and *B. longum* are reconstructed using **gapseq**. Subsequently, the two models are simulated in co-growth and their interaction is investigated.
+肠道细菌直肠真杆菌（*Eubacterium rectale*）已知能够在厌氧条件下利用乙酸盐作为能源，并生成丁酸盐作为代谢终产物（[Rivère *et al.* (2015) Appl Envrion Microbiol](https://pubmed.ncbi.nlm.nih.gov/26319874/)）。乙酸盐是多种其他肠道细菌（包括双歧杆菌属，如长双歧杆菌（Bifidobacterium longum））的常见发酵终产物。本教程中，将使用**gapseq**工具重建直肠真杆菌和长双歧杆菌的基因组规模代谢模型，随后模拟两者的共培养过程并探究其相互作用。
 
-*NOTE: All intermediate files produced by the commands below are stored at the github repository (https://github.com/Waschina/gapseq.tutorial.data), which you could download/clone if you wish to start not at the beginning but at a later step of this tutorial.*
+*注：以下所有由命令生成的中间文件均存储在GitHub仓库（https://github.com/Waschina/gapseq.tutorial.data）中，若您希望从教程的后续步骤开始而非从头操作，可下载或克隆该仓库。*
 
-##### Input
+##### 输入
 
-- Genome assemblies:
+- 基因组文件：
 
   - *Eubacterium rectale* ATCC 33656
 
@@ -20,17 +20,15 @@ The intestinal bacterium *Eubacterium rectale* is known to be able to use acetat
 
     RefSeq: `GCF_000007525.1`
 
-- Growth media file: `gf_medium.csv` 
+- 生长培养基文件：`gf_medium.csv` 
 
-  This is basically a glucose and acetate minimal medium. No amino acids are added since both organisms are likely prototrophic for all proteinogenic amino acids, based on predictions using [GapMind](http://papers.genomics.lbl.gov/cgi-bin/gapView.cgi) ([Price et al. (2019) mSystems](https://doi.org/10.1101/741918 )).  
+  这本质上是一种葡萄糖和乙酸盐的最低限度培养基。基于根据[GapMind](http://papers.genomics.lbl.gov/cgi-bin/gapView.cgi)的预测（[Price et al. (2019) mSystems](https://doi.org/10.1101/741918 )），这两种微生物很可能具备原养型特性（能够自主合成所有蛋白质合成所需的氨基酸），因此培养基中未额外添加氨基酸。
 
   E. rectale: [View Gapmind results](http://papers.genomics.lbl.gov/cgi-bin/gapView.cgi?orgs=NCBI__GCF_000020605.1&set=aa); B. longum: [View Gapmind results](http://papers.genomics.lbl.gov/cgi-bin/gapView.cgi?orgs=NCBI__GCF_000007525.1&set=aa)
 
+##### 准备工作
 
-
-##### Preparations
-
-Download genome assemblies and gapfill medium. Renaming files.
+下载基因组文件和gapfill培养基，重命名文件。
 
 ```sh
 #!/bin/bash
@@ -47,9 +45,7 @@ mv GCF_000020605.1_ASM2060v1_protein.faa.gz eure.faa.gz
 mv GCF_000007525.1_ASM752v1_protein.faa.gz bilo.faa.gz
 ```
 
-
-
-##### gapseq reconstruction 
+##### gapseq重建 
 
 Now we have the genome sequences and a gapfill medium. That is all we need. Lets reconstruct models:
 
@@ -76,12 +72,12 @@ gapseq fill -m $modelA-draft.RDS -n gf_medium.csv -c $modelA-rxnWeights.RDS -g $
 gapseq fill -m $modelB-draft.RDS -n gf_medium.csv -c $modelB-rxnWeights.RDS -g $modelB-rxnXgenes.RDS -b 100
 ```
 
-The final models are stored as R-Object files: `eure.RDS` and `bilo.RDS`, which can be loaded in R using the `readRDS()` command. 
+最终模型存储为R-目标文件：`eure.RDS`和`bilo.RDS`，可以直接使用`readRDS()`命令加载到R语言中。
 
 
-##### Community simulation
+##### 群落模拟
 
-Here, we will use the R-Package `BacArena` to perform an agent-based simulation for the co-growth of *B. longum* and *E. rectale*. The following code-block shows the R-source code for a simple community metabolism simulation.
+在此，将使用R包`BacArena`对*B. longum*和*E. rectale*的共生长进行基于基质的模拟。以下代码块展示了用于简单群落代谢模拟的R源代码。
 
 ```R
 # Load R-packages
@@ -120,18 +116,18 @@ arena <- rmSubs(arena, mediac = "EX_cpd00029_e0")
 
 ```
 
-( * *gapseq frequently predicts, that if the organism is producing lactate as fermentation end product,  the optimal solution could involve both  enantiomers: D-/L-Lactate. For plotting & analysis reasons we prohibit the production of D-Lactate to ensure that we see the level of produced Lactate only as one metabolite: L-Lactate. This has otherwise no effect on simulation results.*)
+（*gapseq工具常预测：若生物体将乳酸作为发酵终产物，其最优代谢路径可能同时涉及两种对映异构体——D-乳酸和L-乳酸。为便于绘图和分析，我们强制禁止D-乳酸的产生，以确保观测到的乳酸产量仅以单一代谢物L-乳酸的形式呈现。此操作仅影响数据可视化方式，不会改变模拟结果的本质。*）
 
-Now we are ready to perform the actual community simulation and plot results:
+现在已经准备好进行实际的群落模拟并绘制结果：
 
 ```R
 # Simulation for 13 time steps
-CF_sim <- simEnv(arena,time=13, sec_obj = "mtf")
+CF_sim <- simEnv(arena, time = 13, sec_obj = "mtf")
 
 # Plot levels of Acetate, Buyrate, and Lactate as well as growth
-par(mfrow=c(1,2))
-plotCurves2(CF_sim,legendpos = "topleft",
-            subs = c("cpd00211_e0","cpd00029_e0","cpd00159_e0"),
+par(mfrow = c(1, 2))
+plotCurves2(CF_sim, legendpos = "topleft",
+            subs = c("cpd00211_e0", "cpd00029_e0", "cpd00159_e0"),
             dict = list(cpd00211_e0 = "Butyrate", 
                         cpd00029_e0 = "Acetate", 
                         cpd00159_e0 = "Lactate"))
@@ -139,9 +135,9 @@ plotCurves2(CF_sim,legendpos = "topleft",
 
 ![](https://github.com/Waschina/gapseq.tutorial.data/raw/master/CF_eure_bilo/CF_eure_bilo.png)
 
-The simulations predicted, that acetate, butyrate, and lactate are produced during co-growth of *E. rectale* and *B. longum*.
+模拟预测显示，在直肠真杆菌（*E. rectale*）与长双歧杆菌（*B. longum*）共生长过程中，乙酸盐、丁酸盐和乳酸盐会被产生。
 
-Next, let's see, if some of the fermentation products are partially consumed by one of the organisms. This involves a few lines of data wrangling:
+接下来，我们需验证部分发酵产物是否被其中一种微生物部分消耗。这需要几行数据处理代码的辅助：
 
 ```R
 # Lets get the exchange fluxs for each grid cell at time step 11
@@ -167,12 +163,12 @@ dt.cf <- melt(dt.cf,
 dt.cf <- dt.cf[!is.na(Flux)] # rm NA entries (no exchange reaction in grid cell)
 
 # Sum exchanges for each species and metabolite over all 100 grid cells
-dt.cf[, .(summed.Flux = sum(Flux)), by = c("species","Metabolite")]
+dt.cf[, .(summed.Flux = sum(Flux)), by = c("species", "Metabolite")]
 ```
 
-The output:
+输出信息：
 
-```
+```R
       species Metabolite summed.Flux
 1: E. rectale    Acetate  -1066.7647
 2:  B. longum    Acetate   1925.5036
@@ -181,5 +177,4 @@ The output:
 5:  B. longum    Lactate    806.4733
 ```
 
-We can see, that *B. longum* (bilo) secretes acetate and lactate as main end product. Approximately 55 % of acetate is consumed by *E. rectale* (eure). *B. longum* produces in addition lactate and *E. rectale* secretes butyrate.
-
+我们可以看到，长双歧杆菌（*B. longum*）将乙酸盐（Acetate）和乳酸盐（Lactate）作为主要代谢终产物分泌。其中约55%（1066.76/1925.50=0.554）的乙酸盐被直肠真杆菌（*E. rectale*）消耗。此外，长双歧杆菌还额外产生乳酸盐，而直肠真杆菌则分泌丁酸盐（Butyrate）。
