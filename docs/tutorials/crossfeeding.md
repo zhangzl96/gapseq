@@ -2,13 +2,13 @@
 
 > <mark>:heavy_exclamation_mark: 请注意</mark>：本教程适用于gapseq版本≤v1.3.1。针对gapseq版本≥v1.4.0的更新版教程正在制作中。
 
-##### 背景
+### 背景
 
 肠道细菌直肠真杆菌（*Eubacterium rectale*）已知能够在厌氧条件下利用乙酸盐作为能源，并生成丁酸盐作为代谢终产物（[Rivère *et al.* (2015) Appl Envrion Microbiol](https://pubmed.ncbi.nlm.nih.gov/26319874/)）。乙酸盐是多种其他肠道细菌（包括双歧杆菌属，如长双歧杆菌（Bifidobacterium longum））的常见发酵终产物。本教程中，将使用**gapseq**工具重建直肠真杆菌和长双歧杆菌的基因组规模代谢模型，随后模拟两者的共培养过程并探究其相互作用。
 
-*注：以下所有由命令生成的中间文件均存储在GitHub仓库（https://github.com/Waschina/gapseq.tutorial.data）中，若您希望从教程的后续步骤开始而非从头操作，可下载或克隆该仓库。*
+*注：以下所有由命令生成的中间文件均存储在[GitHub仓库](https://github.com/Waschina/gapseq.tutorial.data)中，若您希望从教程的后续步骤开始而非从头操作，可下载或克隆该仓库。*
 
-##### 输入
+### 输入
 
 - 基因组文件：
 
@@ -26,7 +26,7 @@
 
   E. rectale: [View Gapmind results](http://papers.genomics.lbl.gov/cgi-bin/gapView.cgi?orgs=NCBI__GCF_000020605.1&set=aa); B. longum: [View Gapmind results](http://papers.genomics.lbl.gov/cgi-bin/gapView.cgi?orgs=NCBI__GCF_000007525.1&set=aa)
 
-##### 准备工作
+### 准备工作
 
 下载基因组文件和gapfill培养基，重命名文件。
 
@@ -45,7 +45,7 @@ mv GCF_000020605.1_ASM2060v1_protein.faa.gz eure.faa.gz
 mv GCF_000007525.1_ASM752v1_protein.faa.gz bilo.faa.gz
 ```
 
-##### gapseq重建 
+### gapseq重建 
 
 Now we have the genome sequences and a gapfill medium. That is all we need. Lets reconstruct models:
 
@@ -75,7 +75,7 @@ gapseq fill -m $modelB-draft.RDS -n gf_medium.csv -c $modelB-rxnWeights.RDS -g $
 最终模型存储为R-目标文件：`eure.RDS`和`bilo.RDS`，可以直接使用`readRDS()`命令加载到R语言中。
 
 
-##### 群落模拟
+### 群落模拟
 
 在此，将使用R包`BacArena`对*B. longum*和*E. rectale*的共生长进行基于基质的模拟。以下代码块展示了用于简单群落代谢模拟的R源代码。
 
