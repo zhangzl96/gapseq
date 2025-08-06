@@ -4,7 +4,7 @@
 
 ### 背景
 
-肠道细菌直肠真杆菌（*Eubacterium rectale*）已知能够在厌氧条件下利用乙酸盐作为能源，并生成丁酸盐作为代谢终产物（[Rivère *et al.* (2015) Appl Envrion Microbiol](https://pubmed.ncbi.nlm.nih.gov/26319874/)）。乙酸盐是多种其他肠道细菌（包括双歧杆菌属，如长双歧杆菌（Bifidobacterium longum））的常见发酵终产物。本教程中，将使用**gapseq**工具重建直肠真杆菌和长双歧杆菌的基因组规模代谢模型，随后模拟两者的共培养过程并探究其相互作用。
+肠道细菌直肠真杆菌（*Eubacterium rectale*）已知能够在厌氧条件下利用乙酸盐作为能源，并生成丁酸盐作为代谢终产物（[Rivère *et al.* (2015) Appl Envrion Microbiol](https://pubmed.ncbi.nlm.nih.gov/26319874/)）。乙酸盐是多种其他肠道细菌（包括双歧杆菌属，如长双歧杆菌（*Bifidobacterium longum*））的常见发酵终产物。本教程中，将使用**gapseq**工具重建直肠真杆菌和长双歧杆菌的基因组规模代谢模型，随后模拟两者的共培养过程并探究其相互作用。
 
 *注：以下所有由命令生成的中间文件均存储在[GitHub仓库](https://github.com/Waschina/gapseq.tutorial.data)中，若您希望从教程的后续步骤开始而非从头操作，可下载或克隆该仓库。*
 
